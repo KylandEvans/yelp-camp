@@ -1,2 +1,4 @@
 node_modules/
 assets/
+TEST_STUFF/
+.env
