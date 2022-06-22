@@ -1,19 +1,52 @@
 <% layout("layouts/boilerplate.ejs") %>
-
+<link
+	rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+/>
+<div id="map" class="clusterMap"></div>
 <h1>All Campgrounds</h1>
-<a href="/campgrounds/new"><button>Create New Campground</button></a>
+
+<div class="search-container my-4 d-block">
+	<h5>Search</h5>
+	<div class="d-flex">
+		<input type="text" class="search form-control" placeholder="Search for a campground" />
+		<button type="button" class="btn-clear">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="16"
+				height="16"
+				fill="currentColor"
+				class="bi bi-x-circle-fill"
+				viewBox="0 0 16 16"
+			>
+				<path
+					d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"
+				/>
+			</svg>
+		</button>
+	</div>
+</div>
+
 <% for(let campground of campgrounds){ %>
-<div class="card">
+<div class="card mb-3 campground-container animate__animated">
 	<div class="row">
 		<div class="col-md-4">
+			<% if(campground.images.length) {%>
 			<img src="<%= campground.images[0].url%>" alt="" class="img-fluid" />
+			<% }else{ %>
+			<img
+				src="https://res.cloudinary.com/dynljtael/image/upload/v1655753874/YelpCamp/wcayhtwjkla0eoyelis5.jpg"
+				alt=""
+				class="img-fluid"
+			/>
+			<% } %>
 		</div>
 		<div class="col-md-8">
 			<div class="card-body">
-				<h5 class="card-title"><%= campground.title %></h5>
+				<h5 class="card-title camp-title"><%= campground.title %></h5>
 				<p class="card-text"><%= campground.description %></p>
 				<p class="card-text">
-					<small class="text-muted"><%= campground.location %></small>
+					<small class="text-muted camp-location"><%= campground.location %></small>
 				</p>
 				<a href="/campgrounds/<%= campground._id %>" class="btn btn-primary"
 					>View <%= campground.title %></a
@@ -24,3 +57,11 @@
 </div>
 
 <% } %>
+
+<script>
+	const mapToken = "<%- process.env.MAPBOX_TOKEN %>";
+	const campgrounds = {features: <%- JSON.stringify(campgrounds) %>};
+</script>
+
+<script src="/JS/clusterMap.js"></script>
+<script src="/JS/campSearch.js"></script>
